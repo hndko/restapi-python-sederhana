@@ -21,8 +21,12 @@ def create_app(config_class=Config):
     app.register_blueprint(api_bp)
     app.register_blueprint(auth_bp)
 
-    # CATATAN:
-    # db.create_all() sebaiknya dihilangkan jika sudah menggunakan migrations
-    # agar database sepenuhnya dikelola oleh flask-migrate.
+    # Register CLI Commands
+    # Import di dalam fungsi untuk menghindari circular import jika ada
+    try:
+        from .cli import seed_command
+        app.cli.add_command(seed_command)
+    except ImportError as e:
+        print(f"Warning: Could not register seed command: {e}")
 
     return app
