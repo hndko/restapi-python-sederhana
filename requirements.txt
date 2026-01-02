@@ -8,3 +8,4 @@ sqlalchemy
 werkzeug
 python-dotenv
 pymysql
+Flask-Migrate

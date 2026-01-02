@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db, cors
+from .extensions import db, cors, migrate
 from config import Config
 
 def create_app(config_class=Config):
@@ -12,16 +12,17 @@ def create_app(config_class=Config):
     # Inisialisasi extension dengan app instance
     db.init_app(app)
     cors.init_app(app)
+    migrate.init_app(app, db) # Inisialisasi Migrations
 
-    # Import dan register blueprint (akan ditambahkan nanti)
+    # Import dan register blueprint
     from .routes.api_routes import api_bp
     from .routes.auth_routes import auth_bp
 
     app.register_blueprint(api_bp)
     app.register_blueprint(auth_bp)
 
-    # Membuat tabel database jika belum ada (opsional, sebaiknya pakai Flask-Migrate di production)
-    with app.app_context():
-        db.create_all()
+    # CATATAN:
+    # db.create_all() sebaiknya dihilangkan jika sudah menggunakan migrations
+    # agar database sepenuhnya dikelola oleh flask-migrate.
 
     return app
