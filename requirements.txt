@@ -6,3 +6,5 @@ PyJWT
 requests
 sqlalchemy
 werkzeug
+python-dotenv
+pymysql
